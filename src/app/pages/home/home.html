@@ -1,0 +1,335 @@
+<!-- 
+<div class="lg:hidden flex items-center justify-center h-screen text-xl font-semibold">
+    Only For PC View
+</div> -->
+
+<div class="lg:container-fluid flex flex-col ">
+    <app-navbar></app-navbar>
+
+    <ul>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+
+    <ng-container *ngIf="loading; else content">
+        <div class="min-h-screen flex items-center justify-center">
+            <div class="text-center">
+                <div class="spinner-border text-danger mb-3" role="status"></div>
+                <p class="text-sm text-muted">Loading...</p>
+            </div>
+        </div>
+    </ng-container>
+
+    <ng-template #content>
+
+        @if (results.trendRes.length) {
+            <div class="px-6 mt-2 md:mt-2">
+            <h3 class="mb-4 text-lg sm:text-xl lg:text-2xl">
+                <li class="font-semibold">Trending of MovieHub</li>
+            </h3>
+
+            <div class="relative" >
+                <div #scroller
+            (scroll)="onHorizontalScroll($event, 'trending', 'None')" class="overflow-x-auto scroll-smooth no-scrollbar touch-pan-x overscroll-x-contain">
+                    <div class="grid grid-flow-col gap-3 w-max md:grid-rows-1 auto-cols-max ">
+                        <div *ngFor="let item of results.trendRes; let index = index" class="cursor-pointer"
+                           >
+
+                            <div 
+                             [routerLink]="['/trending' , item.$id]"
+                            class="
+                                relative
+                                flex items-center
+                                w-[10rem]
+                                h-[16rem]
+                                sm:w-[15rem]
+                                lg:w-[17rem]
+                                
+                                sm:h-[24rem]
+                                lg:h-[24rem]
+                                overflow-hidden
+                            "  >
+                                                   
+                                <h3 class="
+      absolute
+      left-0
+      
+      text-zinc-400
+      text-[6rem]
+      overflow-hidden
+      sm:text-[15rem]
+      font-extrabold
+      leading-none
+      z-0
+      select-none
+    ">
+                                    {{ index + 1 }}
+                                </h3>
+
+                                <!-- CARD (on top, shifted right) -->
+                                <div class="
+      absolute
+    top-0
+    z-10
+    cursor-pointer
+    bg-[#f1f1f1]
+    rounded-md
+    shadow-sm
+    overflow-hidden
+    flex flex-col
+    h-full
+
+    left-10 w-[7.5rem]
+    sm:left-12 sm:w-[9rem]
+    md:left-16 md:w-[10rem]
+    lg:left-20 lg:w-[12rem]
+    " >
+                                    <!-- IMAGE -->
+                                    <div class="relative h-[70%] overflow-hidden group">
+                                        <img *ngIf="item?.featured_image; else fallback" [src]="item.featured_image"
+                                            class="
+          absolute inset-0
+          w-full h-full
+          object-cover
+          transition-transform duration-300 ease-out
+          group-hover:scale-110
+        " alt="" />
+
+                                        <ng-template #fallback>
+                                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTda4dspATpCQyJnM7oO20Pner4B7rtOkAqaQ&s"
+                                                class="
+            absolute inset-0
+            w-full h-full
+            object-cover
+          " alt="" />
+                                        </ng-template>
+                                    </div>
+
+                                    <!-- TEXT -->
+                                    <div class="px-2 py-2 flex flex-col gap-1">
+                                        <h6 class="
+          text-[0.8rem]
+          sm:text-[1rem]
+          font-medium
+          leading-snug
+          line-clamp-2
+          text-black
+        ">
+                                            {{ item.title || item.name }}
+                                        </h6>
+
+                                        <p class="text-xs text-dark-emphasis line-clamp-1">
+                                            {{ item.categories }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <button class="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2
+                           items-center justify-center w-10 h-10 rounded-full
+                           bg-black/50 text-white text-2xl backdrop-blur-sm
+                           transition-all duration-300 hover:bg-black/80 hover:scale-110
+                           active:scale-95 shadow-md z-10" (click)="scrollFromButton($event, -800)">
+                    ‹
+                </button>
+
+                <button class="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2
+                           items-center justify-center w-10 h-10 rounded-full
+                           bg-black/50 text-white text-2xl backdrop-blur-sm
+                           transition-all duration-300 hover:bg-black/80 hover:scale-110
+                           active:scale-95 shadow-md z-10" (click)="scrollFromButton($event, 800)">
+                    ›
+                </button>
+
+
+            </div>
+
+
+        </div>
+        } 
+        
+
+
+        <div class="px-6 mt-2 md:mt-2">
+            <h3 class="mb-4 text-lg sm:text-xl lg:text-2xl">
+                <li class="font-semibold">Recently Added</li>
+            </h3>
+
+            <div class="relative">
+                <div #scroller class="overflow-x-auto scroll-smooth no-scrollbar touch-pan-x overscroll-x-contain"
+                    (scroll)="onHorizontalScroll($event, 'Recent')">
+                    <div class="grid grid-flow-col gap-3 w-max md:grid-rows-2 auto-cols-max">
+                        <div *ngFor="let item of results.Recent" class="cursor-pointer" (click)="goToDetail(item)">
+                            <app-card [item]="item"></app-card>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2
+                           items-center justify-center w-10 h-10 rounded-full
+                           bg-black/50 text-white text-2xl backdrop-blur-sm
+                           transition-all duration-300 hover:bg-black/80 hover:scale-110
+                           active:scale-95 shadow-md z-10" (click)="scrollFromButton($event, -800)">
+                    ‹
+                </button>
+
+                <button class="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2
+                           items-center justify-center w-10 h-10 rounded-full
+                           bg-black/50 text-white text-2xl backdrop-blur-sm
+                           transition-all duration-300 hover:bg-black/80 hover:scale-110
+                           active:scale-95 shadow-md z-10" (click)="scrollFromButton($event, 800)">
+                    ›
+                </button>
+            </div>
+        </div>
+
+        <!-- ================= BOLLYWOOD MOVIES ================= -->
+        <div class="px-6 mt-6">
+            <h3 class="mb-4 font-semibold text-lg sm:text-xl lg:text-2xl">
+                <li class="font-semibold">Trending Bollywood Movies</li>
+            </h3>
+
+            <div class="relative">
+                <div #scroller class="overflow-x-auto scroll-smooth no-scrollbar touch-pan-x overscroll-x-contain"
+                    (scroll)="onHorizontalScroll($event, 'bollyMoviesTrend', 'bolly_movies')">
+                    <div class="grid grid-flow-col gap-3 w-max md:grid-rows-2 auto-cols-max">
+                        <div *ngFor="let item of results.bollyMoviesTrend" class="cursor-pointer"
+                            (click)="goToDetail(item)">
+                            <app-card [item]="item"></app-card>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2
+                               items-center justify-center w-10 h-10 rounded-full
+                               bg-black/50 text-white text-2xl backdrop-blur-sm
+                               transition-all duration-300 hover:bg-black/80 hover:scale-110
+                               active:scale-95 shadow-md z-10" (click)="scrollFromButton($event, -800)">
+                    ‹
+                </button>
+
+                <button class="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2
+                               items-center justify-center w-10 h-10 rounded-full
+                               bg-black/50 text-white text-2xl backdrop-blur-sm
+                               transition-all duration-300 hover:bg-black/80 hover:scale-110
+                               active:scale-95 shadow-md z-10" (click)="scrollFromButton($event, 800)">
+                    ›
+                </button>
+            </div>
+        </div>
+
+        <!-- ================= HOLLYWOOD MOVIES ================= -->
+        <div class="px-6 mt-6">
+            <h3 class="mb-4 font-semibold text-lg sm:text-xl lg:text-2xl">
+                <li class="font-semibold">Trending Hollywood Movies</li>
+            </h3>
+
+            <div class="relative">
+                <div #scroller class="overflow-x-auto scroll-smooth no-scrollbar touch-pan-x overscroll-x-contain"
+                    (scroll)="onHorizontalScroll($event, 'hollyMoviesTrend', 'movies')">
+                    <div class="grid grid-flow-col gap-3 w-max md:grid-rows-2 auto-cols-max">
+                        <div *ngFor="let item of results.hollyMoviesTrend" class="cursor-pointer"
+                            (click)="goToDetail(item)">
+                            <app-card [item]="item"></app-card>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2
+                               items-center justify-center w-10 h-10 rounded-full
+                               bg-black/50 text-white text-2xl backdrop-blur-sm
+                               transition-all duration-300 hover:bg-black/80 hover:scale-110
+                               active:scale-95 shadow-md z-10" (click)="scrollFromButton($event, -800)">
+                    ‹
+                </button>
+
+                <button class="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2
+                               items-center justify-center w-10 h-10 rounded-full
+                               bg-black/50 text-white text-2xl backdrop-blur-sm
+                               transition-all duration-300 hover:bg-black/80 hover:scale-110
+                               active:scale-95 shadow-md z-10" (click)="scrollFromButton($event, 800)">
+                    ›
+                </button>
+            </div>
+        </div>
+
+        <!-- ================= BOLLYWOOD SERIES ================= -->
+        <div class="px-6 mt-6">
+            <h3 class="mb-4 font-semibold text-lg sm:text-xl lg:text-2xl">
+                <li class="font-semibold">Trending Bollywood Series</li>
+            </h3>
+
+            <div class="relative">
+                <div #scroller class="overflow-x-auto scroll-smooth no-scrollbar touch-pan-x overscroll-x-contain"
+                    (scroll)="onHorizontalScroll($event, 'bollySeriesTrend', 'bolly_series')">
+                    <div class="grid grid-flow-col gap-3 w-max md:grid-rows-2 auto-cols-max">
+                        <div *ngFor="let item of results.bollySeriesTrend" class="cursor-pointer"
+                            (click)="goToDetail(item)">
+                            <app-card [item]="item"></app-card>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2
+                               items-center justify-center w-10 h-10 rounded-full
+                               bg-black/50 text-white text-2xl backdrop-blur-sm
+                               transition-all duration-300 hover:bg-black/80 hover:scale-110
+                               active:scale-95 shadow-md z-10" (click)="scrollFromButton($event, -800)">
+                    ‹
+                </button>
+
+                <button class="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2
+                               items-center justify-center w-10 h-10 rounded-full
+                               bg-black/50 text-white text-2xl backdrop-blur-sm
+                               transition-all duration-300 hover:bg-black/80 hover:scale-110
+                               active:scale-95 shadow-md z-10" (click)="scrollFromButton($event, 800)">
+                    ›
+                </button>
+            </div>
+        </div>
+
+        <!-- ================= HOLLYWOOD SERIES ================= -->
+        <div class="px-6 mt-6 mb-10">
+            <h3 class="mb-4 font-semibold text-lg sm:text-xl lg:text-2xl">
+                <li class="font-semibold">Trending Hollywood Series</li>
+            </h3>
+
+            <div class="relative">
+                <div #scroller class="overflow-x-auto scroll-smooth no-scrollbar touch-pan-x overscroll-x-contain"
+                    (scroll)="onHorizontalScroll($event, 'hollySeriesTrend', 'series')">
+                    <div class="grid grid-flow-col gap-3 w-max md:grid-rows-2 auto-cols-max">
+                        <div *ngFor="let item of results.hollySeriesTrend" class="cursor-pointer"
+                            (click)="goToDetail(item)">
+                            <app-card [item]="item"></app-card>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2
+                               items-center justify-center w-10 h-10 rounded-full
+                               bg-black/50 text-white text-2xl backdrop-blur-sm
+                               transition-all duration-300 hover:bg-black/80 hover:scale-110
+                               active:scale-95 shadow-md z-10" (click)="scrollFromButton($event, -800)">
+                    ‹
+                </button>
+
+                <button class="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2
+                               items-center justify-center w-10 h-10 rounded-full
+                               bg-black/50 text-white text-2xl backdrop-blur-sm
+                               transition-all duration-300 hover:bg-black/80 hover:scale-110
+                               active:scale-95 shadow-md z-10" (click)="scrollFromButton($event, 800)">
+                    ›
+                </button>
+            </div>
+        </div>
+
+    </ng-template>
+
+
+    <app-footer></app-footer>
+</div>

@@ -1,0 +1,48 @@
+<div>
+    <app-navbar></app-navbar>
+
+    <ng-container *ngIf="loading; else content ">
+        <div class="min-h-screen flex items-center justify-center border-t-[1px]">
+            <div class="text-center">
+                <div class="spinner-border text-danger mb-3" role="status"></div>
+                <p class="text-sm text-muted">Loading...</p>
+            </div>
+        </div>
+    </ng-container>
+
+    <!-- MAIN CONTENT -->
+    <ng-template #content>
+     
+        
+        <div class="container-fluid px-3 mt-4 border-t-[1px]">
+
+            <h3 class="sm:m-4 font-semibold text-xl m-1 py-3  sm:text-3xl">
+                <li class="font-semibold list-disc text-center  overflow-hidden" >  - {{title | uppercase}} -</li>
+            </h3>
+
+
+            <div class="row 
+              row-cols-2
+              row-cols-sm-3
+              row-cols-md-4
+              row-cols-lg-6
+              g-4">
+
+                <div class="col" *ngFor="let item of results" (click)="goToDetail(item)">
+                    <app-card [item]="item"></app-card>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Pages -->
+        <div class="flex justify-center my-10">
+            <button *ngIf="hasMore" (click)="loadMore()"
+                class="px-6 py-2 bg-red-600 hover:scale-110  transition-all   text-white rounded-lg">
+                Load More
+            </button>
+        </div>
+    </ng-template>
+
+</div>

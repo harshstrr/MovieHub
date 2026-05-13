@@ -1,0 +1,80 @@
+<div
+  class="
+    cursor-pointer
+    bg-[#f1f1f1]
+    rounded-md
+    shadow-sm
+    overflow-hidden
+    flex flex-col
+    w-[11rem]
+    sm:w-[12rem]
+    lg:w-[14rem]
+    h-[22rem]
+    sm:h-[24rem]
+    lg:h-[24rem]
+  "
+>
+  <!-- IMAGE (locked height) -->
+  <div class="relative h-[70%] overflow-hidden group">
+    <img
+      *ngIf="item?.featured_image; else fallback"
+      [src]="item.featured_image"
+      class="
+        absolute inset-0
+        w-full h-full
+        object-cover
+        transition-transform duration-300 ease-out
+        group-hover:scale-110
+      "
+      alt=""
+    />
+
+    <ng-template #fallback>
+      <img
+        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTda4dspATpCQyJnM7oO20Pner4B7rtOkAqaQ&s"
+        class="
+          absolute inset-0
+          w-full h-full
+          object-cover
+          transition-transform duration-300 ease-out
+          group-hover:scale-110
+        "
+        alt=""
+      />
+    </ng-template>
+  </div>
+
+  <!-- CONTENT (locked height) -->
+  <div
+    class="
+      h-[7rem]
+      px-2 py-2
+      flex  flex-wrap
+      justify-between
+      overflow-hidden
+    "
+  >
+    <h6
+      class="
+        text-[0.90rem]
+        sm:text-[1rem]
+        font-medium
+        leading-snug
+        line-clamp-2
+        text-black
+      "
+    >
+      {{ item.title || item.name }}
+    </h6>
+
+    <p
+      class="
+        h-[3rem] overflow-hidden
+        text-xs
+        text-dark-emphasis m-0
+      "
+    >
+      {{ item.categories }}
+    </p>
+  </div>
+</div>
